@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.wilson.humancharacteristics.CameraDetect.CameraDetectActivity;
 import com.example.wilson.humancharacteristics.Setting.SettingActivity;
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
-        System.loadLibrary("opencv_java3");
     }
     private List<Button> listButton;
     @Override
