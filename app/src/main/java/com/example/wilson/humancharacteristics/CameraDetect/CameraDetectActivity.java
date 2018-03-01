@@ -1,9 +1,12 @@
 package com.example.wilson.humancharacteristics.CameraDetect;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wilson.humancharacteristics.R;
 
@@ -54,7 +57,9 @@ public class CameraDetectActivity extends AppCompatActivity implements CameraBri
 
         textView = (TextView) findViewById(R.id.textview);
         textView.setText(fromDetectFaceLib());
+
     }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -105,10 +110,27 @@ public class CameraDetectActivity extends AppCompatActivity implements CameraBri
         // this is for make camera portrait
         Core.transpose(img, mRgbaT);
         Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
-        Core.flip(mRgbaF, img, 1 );
+
+        Core.flip(mRgbaF, img, 1);
         detectFace(img.getNativeObjAddr());
 
         return img;
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        String s = "";
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            s = "OREINTATION LANDSCAPE\n";
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        else if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            s = "OREITATION PORTRAIT\n";
+        }
+        s += "on configure changed was canceled";
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
 }
