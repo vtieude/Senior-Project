@@ -3,7 +3,7 @@
 
 # Sets the minimum version of CMake required to build the native library.
 set (pathToProject ~/Senior-Project)
-set (pathToOpencv ~/~/OpenCV-android-sdk)
+set (pathToOpencv ~/OpenCV-android-sdk)
 
 
 cmake_minimum_required(VERSION 3.4.1)
@@ -26,7 +26,9 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/native-lib.cpp )
+             src/main/cpp/native-lib.cpp
+             src/main/cpp/detectFaceLib.cpp
+             )
 add_library(lib_opencv SHARED IMPORTED)
 
 
