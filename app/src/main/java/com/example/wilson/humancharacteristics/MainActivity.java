@@ -21,20 +21,23 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("native-lib");
     }
     private List<Button> listButton;
+    Button btStart, btStorage, btSetting, btCopyright, btExit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listButton = new ArrayList<Button>();
         // Example of a call to a native method
-        Button btStart = (Button)this.findViewById(R.id.buttonStart);
-        Button btStorage = (Button)this.findViewById(R.id.buttonStorage);
-        Button btSetting = (Button)this.findViewById(R.id.buttonSetting);
-        Button btCopyright = (Button)this.findViewById(R.id.buttonCopyright);
+        btStart = (Button)this.findViewById(R.id.buttonStart);
+        btStorage = (Button)this.findViewById(R.id.buttonStorage);
+        btSetting = (Button)this.findViewById(R.id.buttonSetting);
+        btCopyright = (Button)this.findViewById(R.id.buttonCopyright);
+        btExit = (Button) this.findViewById(R.id.buttonExit);
         listButton.add(btStart);
         listButton.add(btStorage);
         listButton.add(btSetting);
         listButton.add(btCopyright);
+        listButton.add(btExit);
         onClickButton();
     }
     public void onClickButton() {
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                         case 1: myIntent = new Intent(MainActivity.this, StorageActivity.class);
                             break;
                         case 2:  myIntent = new Intent(MainActivity.this, SettingActivity.class);
+                            break;
+                        case 4: finish(); System.exit(0);
                         default: break;
                     }
                     MainActivity.this.startActivity(myIntent);
@@ -57,4 +62,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
 }
