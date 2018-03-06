@@ -28,6 +28,8 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              src/main/cpp/native-lib.cpp
              src/main/cpp/detectFaceLib.cpp
+             src/main/cpp/recognizeFace.cpp
+             src/main/cpp/CNN_Classifier.cpp
              )
 add_library(lib_opencv SHARED IMPORTED)
 

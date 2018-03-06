@@ -16,6 +16,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -62,5 +63,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
+    public native String stringFromJNI();
 }
