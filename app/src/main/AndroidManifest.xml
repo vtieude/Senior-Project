@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.wilson.humancharacteristics">
+  
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -20,7 +21,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".CameraDetect.CameraDetectActivity" />
-        <activity android:name=".Setting.SettingActivity"></activity>
+        <activity android:name=".Setting.SettingActivity" />
+        <activity android:name=".Storage.StorageActivity" />
+        <activity android:name=".Author.AuthorInformationActivity"></activity>
     </application>
 
 </manifest>
