@@ -1,9 +1,11 @@
 package com.example.wilson.humancharacteristics.CameraDetect;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,8 @@ import org.opencv.imgproc.Imgproc;
 
 public class CameraDetectActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2{
 
+    private OrientationListener orientationListener;
+
     static {
         System.loadLibrary("native-lib");
         System.loadLibrary("opencv_java3");
@@ -30,7 +34,6 @@ public class CameraDetectActivity extends AppCompatActivity implements CameraBri
     private JavaCameraView javaCameraView;
     private Mat img, mRgbaT, mRgbaF;
     private TextView textView;
-
     private BaseLoaderCallback baseLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -57,7 +60,9 @@ public class CameraDetectActivity extends AppCompatActivity implements CameraBri
 
         textView = (TextView) findViewById(R.id.textview);
         textView.setText(fromDetectFaceLib());
+//        orientationListener = new OrientationListener(this);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
@@ -107,30 +112,60 @@ public class CameraDetectActivity extends AppCompatActivity implements CameraBri
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         img = inputFrame.rgba();
 
-        // this is for make camera portrait
-        Core.transpose(img, mRgbaT);
-        Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
+            // this is for make camera portrait
+            Core.transpose(img, mRgbaT);
+            Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(), 0,0, 0);
 
-        Core.flip(mRgbaF, img, 1);
-        detectFace(img.getNativeObjAddr());
+            Core.flip(mRgbaF, img, 1);
+            detectFace(img.getNativeObjAddr());
 
         return img;
     }
 
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        String s = "";
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            s = "OREINTATION LANDSCAPE\n";
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig){
+//        super.onConfigurationChanged(newConfig);
+//        String s = "";
+//        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+//            s = "OREINTATION LANDSCAPE\n";
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }
+//        else if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+//            s = "OREITATION PORTRAIT\n";
+//        }
+//        s += "on configure changed was canceled";
+//        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+//    }
+//
+
+private class OrientationListener extends OrientationEventListener {
+    final int ROTATION_O    = 1;
+    final int ROTATION_90   = 2;
+    final int ROTATION_180  = 3;
+    final int ROTATION_270  = 4;
+
+    private int rotation = 0;
+    public OrientationListener(Context context) { super(context); }
+
+    @Override public void onOrientationChanged(int orientation) {
+        if( (orientation < 35 || orientation > 325) && rotation!= ROTATION_O){ // PORTRAIT
+            rotation = ROTATION_O;
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        else if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            s = "OREITATION PORTRAIT\n";
+        else if( orientation > 145 && orientation < 215 && rotation!=ROTATION_180){ // REVERSE PORTRAIT
+            rotation = ROTATION_180;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        s += "on configure changed was canceled";
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        else if(orientation > 55 && orientation < 125 && rotation!=ROTATION_270){ // REVERSE LANDSCAPE
+            rotation = ROTATION_270;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+        else if(orientation > 235 && orientation < 305 && rotation!=ROTATION_90){ //LANDSCAPE
+            rotation = ROTATION_90;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
-
 }
+}
+
